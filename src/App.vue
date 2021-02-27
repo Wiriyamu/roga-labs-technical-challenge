@@ -1,12 +1,14 @@
 <template>
   <the-header />
+  <dashboard />
 </template>
 
 <script>
 import TheHeader from '@/components/TheHeader.vue'
+import Dashboard from '@/components/Dashboard.vue'
 export default {
   name: 'App',
-  components: { TheHeader }
+  components: { TheHeader, Dashboard }
 }
 </script>
 
