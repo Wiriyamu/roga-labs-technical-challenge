@@ -1,0 +1,8 @@
+{
+  "**/*.+(js|vue)": [
+    "eslint --fix",
+    "prettier --write",
+    "yarn test:unit --bail --findRelatedTests",
+    "git add"
+  ]
+}
