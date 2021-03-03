@@ -104,8 +104,8 @@
   </section>
 
   <section v-if="state.students.length" class="my-4 mx-4">
-    <ul class="cards">
-      <li v-for="student in state.students" :key="student.id" class="card">
+    <ul v-if="filteredStudents.length" class="cards">
+      <li v-for="student in filteredStudents" :key="student.id" class="card">
         <div class="d-flex">
           <h3>{{ student.name }}</h3>
           <div
@@ -231,11 +231,11 @@
         </div>
       </li>
     </ul>
-    <!-- <h1 v-else class="mt-4 ml-4">
-      Não há usuários com os critérios de busca utilizado 😢
-    </h1> -->
+    <h1 v-else class="mt-5 ml-4">
+      Não há usuários com os critérios de busca utilizados 😢
+    </h1>
   </section>
-  <h1 v-else class="mt-4">Não há usuários cadastrados 😢</h1>
+  <h1 v-else class="mt-5 ml-4">Não há usuários cadastrados 😢</h1>
 </template>
 
 <script>
@@ -243,7 +243,7 @@ import { reactive, computed } from 'vue'
 import { api } from '@/services/api.js'
 export default {
   name: 'ListStudents',
-  setup(props) {
+  setup() {
     const state = reactive({
       search: '',
       studentId: null,
@@ -282,8 +282,8 @@ export default {
     const filteredStudents = computed(() => {
       return state.students.filter(student => {
         return (
-          student.name.toLowerCase().includes(props.search.toLowerCase()) ||
-          student.email.toLowerCase().includes(props.search.toLowerCase())
+          student.name.toLowerCase().includes(state.search.toLowerCase()) ||
+          student.email.toLowerCase().includes(state.search.toLowerCase())
         )
       })
     })
