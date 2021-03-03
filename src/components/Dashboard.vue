@@ -1,31 +1,33 @@
 <template>
-  <main class="dashboard mt-4">
-    <div class="d-flex justify-content-between align-itens-center ml-5 mr-5">
-      <dashboard-search-input />
-      <dashboard-filter-dropdown />
-      <dashboard-new-student-button />
-    </div>
-    <div class="ml-5 mr-5">
-      <dashboard-students-list />
-    </div>
-  </main>
+  <list-students />
 </template>
 
 <script>
-import DashboardSearchInput from '@/components/DashboardSearchInput'
-import DashboardFilterDropdown from '@/components/DashboardFilterDropdown'
-import DashboardNewStudentButton from '@/components/DashboardNewStudentButton'
-import DashboardStudentsList from '@/components/DashboardStudentsList'
-
+import ListStudents from './ListStudents.vue'
+import { reactive } from 'vue'
 export default {
+  components: { ListStudents },
   name: 'Dashboard',
-  components: {
-    DashboardSearchInput,
-    DashboardFilterDropdown,
-    DashboardNewStudentButton,
-    DashboardStudentsList
+  setup() {
+    const state = reactive({
+      search: '',
+      student: {
+        name: '',
+        email: '',
+        age: null,
+        phone: null,
+        assessment: '12/02/2021',
+        active: true
+      }
+    })
+
+    return { state }
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.search {
+  width: 300px;
+}
+</style>
