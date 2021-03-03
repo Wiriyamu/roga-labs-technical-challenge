@@ -9,6 +9,16 @@
       aria-describedby="basic-addon1"
     />
 
+    <div>
+      <label class="mr-2"><strong>Filtros:</strong></label>
+      <select v-model="state.filter">
+        <option disabled value="">Estudantes</option>
+        <option>Ativos</option>
+        <option>Inativos</option>
+        <option>Todos</option>
+      </select>
+    </div>
+
     <button
       type="button"
       class="btn btn-danger mr-5"
@@ -246,6 +256,7 @@ export default {
   setup() {
     const state = reactive({
       search: '',
+      filter: '',
       studentId: null,
       student: {
         name: '',
@@ -280,6 +291,11 @@ export default {
     }
 
     const filteredStudents = computed(() => {
+      if (state.filter === 'Ativos') {
+        return state.students.filter(student => student.active === true)
+      } else if (state.filter === 'Inativos') {
+        return state.students.filter(student => student.active === false)
+      }
       return state.students.filter(student => {
         return (
           student.name.toLowerCase().includes(state.search.toLowerCase()) ||
