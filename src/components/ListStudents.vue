@@ -1,119 +1,13 @@
 <template>
-  <section class="ml-5 mt-5 d-flex justify-content-between align-items-center">
-    <input
-      v-model="state.search"
-      type="text"
-      class="form-control search"
-      placeholder="Busque por nomes ou emails"
-      aria-label="Username"
-      aria-describedby="basic-addon1"
-    />
-
-    <div>
-      <label class="mr-2"><strong>Filtros:</strong></label>
-      <select v-model="state.filter">
-        <option disabled value="">Estudantes</option>
-        <option>Ativos</option>
-        <option>Inativos</option>
-        <option>Todos</option>
-      </select>
-    </div>
-
-    <button
-      type="button"
-      class="btn btn-danger mr-5"
-      data-toggle="modal"
-      data-target="#createModal"
-    >
-      Novo Aluno
-    </button>
-
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="createModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Cadastrar Aluno</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div
-              v-if="state.postSuccess"
-              class="alert alert-success"
-              role="alert"
-            >
-              Estudante criado com sucesso!
-            </div>
-            <div class="form-group">
-              <label>Name</label>
-              <input
-                v-model.trim="state.student.name"
-                type="text"
-                class="form-control"
-              />
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input
-                v-model.trim="state.student.email"
-                type="email"
-                class="form-control"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Idade</label>
-              <input
-                v-model.number="state.student.age"
-                type="number"
-                class="form-control"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Telefone</label>
-              <input
-                v-model.number="state.student.phone"
-                type="number"
-                class="form-control"
-              />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cancelar
-            </button>
-            <button
-              @click="createStudent"
-              type="button"
-              class="btn btn-primary"
-            >
-              Salvar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+  <section
+    class="ml-5 mt-5 d-flex flex-sm-wrap justify-content-between align-items-center"
+  >
+    <search-input @search-value="updateSearch" />
+    <filter-select @select-value="updateFilter" />
+    <new-student @new-student-created="fetchNewStudents" />
   </section>
 
-  <section v-if="state.students.length" class="my-4 mx-4">
+  <section v-if="state.students.length" class="my-4 mx-4 py-4">
     <ul v-if="filteredStudents.length" class="cards">
       <li v-for="student in filteredStudents" :key="student.id" class="card">
         <div class="d-flex">
@@ -158,6 +52,7 @@
                     Editar Estudante
                   </h5>
                   <button
+                    @click="clearForm"
                     type="button"
                     class="close"
                     data-dismiss="modal"
@@ -173,6 +68,14 @@
                     role="alert"
                   >
                     Estudante editado com sucesso!
+                  </div>
+                  <div
+                    v-if="state.formIsEmpty"
+                    class="alert alert-danger"
+                    role="alert"
+                  >
+                    O formulário possui campos vazios! Preencha-o corretamente e
+                    tente novamente.
                   </div>
                   <div class="form-group">
                     <label>Name</label>
@@ -212,6 +115,7 @@
                 </div>
                 <div class="modal-footer">
                   <button
+                    @click="clearForm"
                     type="button"
                     class="btn btn-secondary"
                     data-dismiss="modal"
@@ -219,7 +123,7 @@
                     Cancelar
                   </button>
                   <button
-                    @click="editStudent"
+                    @click="editStudentSave"
                     type="button"
                     class="btn btn-primary"
                   >
@@ -251,7 +155,12 @@
 <script>
 import { reactive, computed } from 'vue'
 import { api } from '@/services/api.js'
+import SearchInput from './SearchInput.vue'
+import FilterSelect from './FilterSelect'
+import NewStudent from './NewStudent'
+
 export default {
+  components: { SearchInput, FilterSelect, NewStudent },
   name: 'ListStudents',
   setup() {
     const state = reactive({
@@ -266,22 +175,21 @@ export default {
         assessment: '12/02/2021',
         active: true
       },
-      students: [],
-      postSucess: false,
-      putSuccess: false
+      formIsEmpty: false,
+      putSuccess: false,
+      students: []
     })
 
-    const infoStudent = ({ id }) => (state.studentId = id)
-
-    const createStudent = async () => {
-      await api.post('/students', state.student)
-      state.postSuccess = true
-      clearForm()
-      setTimeout(() => {
-        state.postSuccess = false
-      }, 3000)
-      getStudents()
+    const getStudents = async () => {
+      const { data } = await api.get('/students')
+      state.students = data
     }
+    getStudents()
+
+    const updateSearch = value => (state.search = value)
+    const updateFilter = value => (state.filter = value)
+    const fetchNewStudents = () => getStudents()
+    const infoStudent = ({ id }) => (state.studentId = id)
 
     const clearForm = () => {
       state.student.name = ''
@@ -290,48 +198,78 @@ export default {
       state.student.phone = null
     }
 
-    const filteredStudents = computed(() => {
-      if (state.filter === 'Ativos') {
-        return state.students.filter(student => student.active === true)
-      } else if (state.filter === 'Inativos') {
-        return state.students.filter(student => student.active === false)
-      }
-      return state.students.filter(student => {
-        return (
-          student.name.toLowerCase().includes(state.search.toLowerCase()) ||
-          student.email.toLowerCase().includes(state.search.toLowerCase())
-        )
-      })
-    })
+    const showEmptyAlert = () => {
+      state.formIsEmpty = true
+      setTimeout(() => {
+        state.formIsEmpty = false
+      }, 5000)
+    }
+
+    const changePutSuccess = () => {
+      state.putSuccess = true
+      setTimeout(() => {
+        state.putSuccess = false
+      }, 2000)
+    }
+
+    const editStudent = async () => {
+      await api.put(`/students/${state.studentId}`, state.student)
+      clearForm()
+      changePutSuccess()
+      getStudents()
+    }
+
+    const formIsEmpty = () => {
+      const name = state.student.name === ''
+      const email = state.student.email === ''
+      const age = state.student.age === null
+      const phone = state.student.phone === null
+
+      name || email || age || phone ? showEmptyAlert() : editStudent()
+    }
+
+    const editStudentSave = () => formIsEmpty()
 
     const deleteStudent = async ({ id }) => {
       await api.delete(`/students/${id}`)
       getStudents()
     }
 
-    const editStudent = async () => {
-      await api.put(`/students/${state.studentId}`, state.student)
-      state.putSuccess = true
-      clearForm()
-      setTimeout(() => {
-        state.putSuccess = false
-      }, 3000)
-      getStudents()
+    const nameOrEmail = () => {
+      const students = state.students
+      const search = state.search
+
+      return students.filter(student => {
+        return (
+          student.name.toLowerCase().includes(search.toLowerCase()) ||
+          student.email.toLowerCase().includes(search.toLowerCase())
+        )
+      })
     }
 
-    const getStudents = async () => {
-      const { data } = await api.get('/students')
-      state.students = data
+    const activeOrInactive = () => {
+      const filter = state.filter
+      const active = student => student.active === true
+      const inactive = student => student.active === false
+      const students = state.students
+
+      if (filter === 'Ativos') return students.filter(active)
+      else if (filter === 'Inativos') return students.filter(inactive)
+      return nameOrEmail()
     }
-    getStudents()
+
+    const filteredStudents = computed(() => activeOrInactive())
 
     return {
       state,
+      updateSearch,
+      updateFilter,
+      fetchNewStudents,
       infoStudent,
-      editStudent,
+      clearForm,
+      editStudentSave,
       deleteStudent,
-      filteredStudents,
-      createStudent
+      filteredStudents
     }
   }
 }
