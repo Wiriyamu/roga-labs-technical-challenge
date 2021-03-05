@@ -1,0 +1,94 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "Leanne Graham",
+      "email": "Sincere@april.biz",
+      "age": 24,
+      "phone": "(61) 98541-9515",
+      "assessment": "12/02/2021",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Clementine Bauch",
+      "email": "Nathan@yesenia.net",
+      "age": 26,
+      "phone": "(61) 986254-3548",
+      "assessment": "12/02/2021",
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Patricia Lebsack",
+      "email": "Julianne.OConner@kory.org",
+      "age": 26,
+      "phone": "(61) 99825-5213",
+      "assessment": "12/02/2021",
+      "active": false
+    },
+    {
+      "id": 5,
+      "name": "Chelsey Dietrich",
+      "email": "Lucio_Hettinger@annie.ca",
+      "age": 22,
+      "phone": "(61) 99465-6305",
+      "assessment": "12/02/2021",
+      "active": true
+    },
+    {
+      "id": 6,
+      "name": "Mrs. Dennis Schulist",
+      "email": "Karley_Dach@jasper.info",
+      "age": 23,
+      "phone": "(61) 99928-1209",
+      "assessment": "12/02/2021",
+      "active": false
+    },
+    {
+      "id": 7,
+      "name": "Kurtis Weissnat",
+      "email": "Telly.Hoeger@billy.biz",
+      "age": 21,
+      "phone": "(61) 99629-4567",
+      "assessment": "12/02/2021",
+      "active": false
+    },
+    {
+      "id": 8,
+      "name": "Nicholas Runolfsdottir V",
+      "email": "Sherwood@rosamond.me",
+      "age": 27,
+      "phone": "(61) 98592-0648",
+      "assessment": "12/02/2021",
+      "active": true
+    },
+    {
+      "id": 9,
+      "name": "Glenna Reichert",
+      "email": "Chaim_McDermott@dana.io",
+      "age": 25,
+      "phone": "(61) 99448-9032",
+      "assessment": "12/02/2021",
+      "active": true
+    },
+    {
+      "id": 10,
+      "name": "Clementina DuBuque",
+      "email": "Rey.Padberg@karina.biz",
+      "age": 28,
+      "phone": "(61) 99268-7134",
+      "assessment": "12/02/2021",
+      "active": true
+    },
+    {
+      "name": "Willian Silva",
+      "email": "will@teste2.com",
+      "age": 22,
+      "phone": 61994648220,
+      "assessment": "12/02/2021",
+      "active": true,
+      "id": 11
+    }
+  ]
+}
