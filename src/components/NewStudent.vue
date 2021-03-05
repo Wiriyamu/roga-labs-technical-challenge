@@ -26,6 +26,7 @@
             class="close"
             data-dismiss="modal"
             aria-label="Close"
+            data-test="close"
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -83,10 +84,16 @@
             type="button"
             class="btn btn-secondary"
             data-dismiss="modal"
+            data-test="cancel"
           >
             Cancelar
           </button>
-          <button @click="newStudentSave" type="button" class="btn btn-primary">
+          <button
+            @click="newStudentSave"
+            type="button"
+            class="btn btn-primary"
+            data-test="new-student-save"
+          >
             Salvar
           </button>
         </div>

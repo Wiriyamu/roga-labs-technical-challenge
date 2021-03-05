@@ -2,9 +2,9 @@
   <div>
     <label class="mr-2"><strong>Filtros:</strong></label>
     <select @input="selectValue">
-      <option disabled value="">Estudantes</option>
+      <option disabled>Estudantes</option>
       <option>Todos</option>
-      <option>Ativos</option>
+      <option data-test="active">Ativos</option>
       <option>Inativos</option>
     </select>
   </div>

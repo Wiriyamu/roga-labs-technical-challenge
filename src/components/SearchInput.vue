@@ -6,6 +6,7 @@
     placeholder="Busque por nomes ou emails"
     aria-label="Username"
     aria-describedby="basic-addon1"
+    data-test="search-input"
   />
 </template>
 
